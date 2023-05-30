@@ -17,6 +17,8 @@ public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    @Column(name = "content", length = 3000)
     private String content;
     private String imageUrl;
     private String videoUrl;

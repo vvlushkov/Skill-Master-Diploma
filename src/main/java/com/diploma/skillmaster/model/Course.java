@@ -19,11 +19,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "description", length = 3000)
+    private String description;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdOn;
@@ -34,9 +35,8 @@ public class Course {
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @ManyToMany(mappedBy = "courses")
+    private List<UserEntity> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Step> steps = new ArrayList<>();
