@@ -26,6 +26,8 @@ public class CoursesDto {
     @Min(10)
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     private String description;
+    @NotEmpty(message = "Це поле повинно бути заповненим!")
+    private String imageUrl;
     private Instant createdOn;
     private Instant updatedOn;
     private UserEntity createdBy;

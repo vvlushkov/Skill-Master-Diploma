@@ -25,6 +25,7 @@ public class Course {
     private String name;
     @Column(name = "description", length = 3000)
     private String description;
+    private String imageUrl;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdOn;
