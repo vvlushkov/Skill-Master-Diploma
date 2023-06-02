@@ -6,9 +6,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import java.util.List;
 
 @Data
-public class RegistrationDto {
+public class UserDto {
     private Long id;
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     @Min(4)
@@ -19,8 +20,7 @@ public class RegistrationDto {
     private String email;
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     @Min(8)
-    @Max(16)
+    @Max(20)
     private String password;
-    @NotEmpty(message = "Це поле повинно бути заповненим!")
-    private Role role;
+    private List<Role> roles;
 }
