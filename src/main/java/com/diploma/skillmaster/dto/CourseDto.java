@@ -1,6 +1,5 @@
 package com.diploma.skillmaster.dto;
 
-import com.diploma.skillmaster.model.Step;
 import com.diploma.skillmaster.model.UserEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoursesDto {
+public class CourseDto {
     private Long id;
     @Min(4)
     @Max(40)
@@ -31,5 +30,5 @@ public class CoursesDto {
     private Instant createdOn;
     private Instant updatedOn;
     private UserEntity createdBy;
-    private List<Step> steps;
+    private List<StepDto> steps;
 }

@@ -36,9 +36,10 @@ public class Course {
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private List<Step> steps = new ArrayList<>();
+
     @ManyToMany(mappedBy = "courses")
     private List<UserEntity> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private List<Step> steps = new ArrayList<>();
 }
