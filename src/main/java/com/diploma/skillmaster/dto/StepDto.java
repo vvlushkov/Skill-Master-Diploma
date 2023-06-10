@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StepDto {
+public class StepDto implements Comparable<StepDto> {
     private Long id;
     @Min(value = 4, message = "Максимальна довжина = 4 символа")
     @Max(value = 40, message = "Максимальна довжина = 40 символів")
@@ -24,5 +24,10 @@ public class StepDto {
     private String content;
     private String imageUrl;
     private String videoUrl;
-    private Course course;
+    private CourseDto course;
+
+    @Override
+    public int compareTo(StepDto o) {
+        return this.id.compareTo(o.id);
+    }
 }

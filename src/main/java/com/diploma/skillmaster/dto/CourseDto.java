@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseDto {
+public class CourseDto implements Comparable<CourseDto>{
     private Long id;
     @Min(4)
     @Max(40)
@@ -29,6 +28,11 @@ public class CourseDto {
     private String imageUrl;
     private Instant createdOn;
     private Instant updatedOn;
-    private UserEntity createdBy;
+    private UserEntity creator;
     private List<StepDto> steps;
+
+    @Override
+    public int compareTo(CourseDto o) {
+        return this.id.compareTo(o.id);
+    }
 }

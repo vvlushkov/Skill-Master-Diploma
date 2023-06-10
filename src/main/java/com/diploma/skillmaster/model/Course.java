@@ -32,8 +32,8 @@ public class Course {
     private Instant updatedOn;
 
     @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
-    private UserEntity createdBy;
+    @JoinColumn(name = "creator", nullable = false)
+    private UserEntity creator;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Step> steps = new ArrayList<>();

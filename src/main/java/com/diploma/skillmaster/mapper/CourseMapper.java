@@ -12,7 +12,7 @@ public interface CourseMapper {
                 .imageUrl(courseDto.getImageUrl())
                 .createdOn(courseDto.getCreatedOn())
                 .updatedOn(courseDto.getUpdatedOn())
-                .createdBy(courseDto.getCreatedBy())
+                .creator(courseDto.getCreator())
                 .steps(courseDto.getSteps()
                         .stream().map(StepMapper::mapToStep).toList())
                 .build();
@@ -26,7 +26,7 @@ public interface CourseMapper {
                 .imageUrl(course.getImageUrl())
                 .createdOn(course.getCreatedOn())
                 .updatedOn(course.getUpdatedOn())
-                .createdBy(course.getCreatedBy())
+                .creator(course.getCreator())
                 .steps(course.getSteps()
                         .stream().map(StepMapper::mapToStepDto).toList())
                 .build();
