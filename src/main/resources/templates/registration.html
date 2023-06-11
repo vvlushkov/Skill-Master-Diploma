@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}">
+<head>
+    <title>Реєстрація</title>
+</head>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+    <main class="content">
+        <section class="py-5">
+            <div class="mx-auto col-10 col-md-8 col-lg-5">
+                <div>
+                    <div th:if="${param.fail}" class="alert alert-warning">
+                        По такому нікнейму та/або електронній пошті вже зареєстровано користувача!
+                    </div>
+                    <div class="login-form">
+                        <form method="post" role="form" th:action="@{/registration}" th:object="${user}">
+                            <div class="form-group">
+                                <label>Ім'я користувача (нікнейм)</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Нікнейм (ім'я) який буде відображатися в профілі"
+                                        th:field="*{username}">
+                            </div>
+                            <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
+                            <div class="form-group">
+                                <label>Е-пошта</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Е-пошта на яку вам будуть приходити повідомлення"
+                                        th:field="*{email}">
+                            </div>
+                            <p th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></p>
+                            <div class="form-group">
+                                <label>Пароль</label>
+                                <input
+                                        type="password"
+                                        class="form-control"
+                                        placeholder="Пароль, за яким ви будете входити в аккаунт"
+                                        th:field="*{password}">
+                            </div>
+                            <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
+                            <button type="submit" class="btn btn-outline-primary mt-1">Зареєструватися
+                            </button>
+                            <a th:href="@{/login}" class="btn btn-outline-primary mt-1">Вже є аккаунт? Натисни щоб увійти</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer layout:fragment="footer"></footer>
+</body>
+</html>

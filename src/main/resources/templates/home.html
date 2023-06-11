@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Головна сторінка</title>
+</head>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+    <main class="content">
+        <!-- Page Content-->
+        <section class="py-5">
+            <div class="container px-5 my-2">
+                <div th:if="${param.creatorYes}" class="alert alert-success w-50 mx-auto">
+                    <p class="text-center">Ви стали автором курсів! Тепер ви можете створювати і постити свої курси на сайті. <br>
+                       Щоб почати перейдіть в "Профіль" -> "Стоврити курс"</p>
+                </div>
+                <div th:if="${param.creatorNo}" class="alert alert-success w-50 mx-auto">
+                    <p class="text-center">Ви відмовились ставати автором курсів. <br>
+                       Якщо передумаєте, то перейдіть в "Профіль" -> "Стати автором"</p>
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success w-50 mx-auto">
+                    <p class="text-center">Ви вийшли зі свого аккаунту.</p>
+                </div>
+                <div class="text-center mb-3">
+                    <h1 class="display-4 fw-bolder">Вітаємо на навчальному ресурсі Skill Master</h1>
+                    <p class="display-6 fw-bold text-black mb-0">Вивчай нові навички кожен день!</p>
+                </div>
+                <div class="row gx-5">
+
+                    <!--Home page content-->
+
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer layout:fragment="footer"></footer>
+</body>
+</html>

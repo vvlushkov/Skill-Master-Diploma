@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}">
+<head>
+    <title>Стати автором</title>
+</head>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+    <main class="content">
+        <!-- Page Content-->
+        <section class="py-5">
+            <div class="container px-5 my-2">
+                <div class="text-center mb-3">
+                    <h1 class="display-4 fw-bolder">Ви хочете стати автором курсів?</h1>
+                    <p class="display-6 fw-bold text-black mb-0">Підтвердивши, ви отримаєте змогу створювати і постити курси
+                        на ресурсі Skill Master</p>
+                </div>
+                <div class="row-cols-1 text-center">
+                    <a class="btn btn-success ms-auto me-2 col w-25" th:href="@{/creator/new?choice=ACCEPT}">Так, я хочу стати автором!</a>
+                    <a class="btn btn-warning me-auto ms-2 col w-25" th:href="@{/creator/new?choice=DENY}">Ні, я передумав</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer layout:fragment="footer"></footer>
+</body>
+</html>

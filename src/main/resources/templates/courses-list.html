@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}">
+<head>
+    <title>Всі курси</title>
+</head>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+    <main class="content">
+        <section class="py-5">
+            <div class="container px-5 my-0">
+                <div class="text-center mb-3">
+                    <h1 class="display-5 fw-bolder">Що хочеш вивчити нового?</h1>
+                    <p class="fs-3 fw-bold text-black mb-0">Спробуй знайти по назві або обери щось цікаве з переліку нижче</p>
+                </div>
+                <div>
+                    <form th:action="@{/course/search}" class="form-inline mt-0 mb-3" >
+                        <input name="keyword" class="form-control mb-5 mx-auto w-75" type="search" placeholder="Впиши назву курсу"
+                               aria-label="Search">
+                    </form>
+                </div>
+                <div class="row gx-5">
+                    <div th:each="course :${courses}" class="col-lg-6 mb-2">
+                        <div class="position-relative mb-3">
+                            <p><img class="img-fluid rounded-3 mb-0" th:src="${course.imageUrl}" th:alt="${course.name}"/></p>
+                            <a th:text="${course.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
+                               th:href="@{/course/{courseId}(courseId=${course.id})}">Project name</a>
+                        </div>
+                        <a class="btn btn-primary mb-3" th:href="@{/course/{courseId}(courseId=${course.id})}">Детальніше</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main><br>
+    <footer layout:fragment="footer"></footer>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}">
+<head>
+    <title>Створення курсу</title>
+</head>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+    <main class="content">
+        <section class="py-5">
+            <div class="mx-auto col-10 col-md-8 col-lg-5">
+                <form role="form" method="post" th:action="@{/course/save}" th:object="${course}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Назва курсу</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    placeholder="Назва курсу"
+                                    th:field="*{name}">
+                            <p th:if="${#fields.hasErrors('name')}" class="text-danger mb-2" th:errors="*{name}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageUrl">Посилання на картинку-обкладинку</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="imageUrl"
+                                    placeholder="Посилання на картинку з відкритого ресурсу"
+                                    th:field="*{imageUrl}">
+                            <p th:if="${#fields.hasErrors('imageUrl')}" class="text-danger mb-2" th:errors="*{imageUrl}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Опис курсу</label>
+                            <textarea
+                                    type="text"
+                                    class="form-control"
+                                    id="description"
+                                    placeholder="Опис"
+                                    th:field="*{description}"></textarea>
+                            <p th:if="${#fields.hasErrors('description')}" class="text-danger mb-2" th:errors="*{description}"></p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary mt-3">Створити курс</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer layout:fragment="footer"></footer>
+</body>
+</html>
