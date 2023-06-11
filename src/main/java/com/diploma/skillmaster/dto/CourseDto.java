@@ -1,9 +1,8 @@
 package com.diploma.skillmaster.dto;
 
 import com.diploma.skillmaster.model.UserEntity;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDto implements Comparable<CourseDto>{
     private Long id;
-    @Min(4)
-    @Max(40)
+    @Size(min = 4, max = 40, message = "Назва курсу повинна бути завдовшки від 4 до 40 символів")
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     private String name;
-    @Min(10)
+    @Size(min = 10, max = 3000, message = "Опис курсу повинен бути від 10 до 3000 символів")
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     private String description;
     @NotEmpty(message = "Це поле повинно бути заповненим!")

@@ -1,23 +1,21 @@
 package com.diploma.skillmaster.service;
 
 import com.diploma.skillmaster.dto.UserDto;
-import com.diploma.skillmaster.model.Role;
+import com.diploma.skillmaster.mapper.UserMapper;
 import com.diploma.skillmaster.model.UserEntity;
-import com.diploma.skillmaster.repository.RoleRepository;
 import com.diploma.skillmaster.repository.UserRepository;
 import com.diploma.skillmaster.security.SecurityUtil;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -30,7 +28,7 @@ public class UserService {
         UserEntity user = UserEntity.builder()
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword())) //THERE WILL BE PASSWORD ENCODER
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .roles(userDto.getRoles())
                 .build();
         userRepository.save(user);
@@ -40,20 +38,26 @@ public class UserService {
         return userRepository.existsByEmailOrUsername(email, username);
     }
 
-    public UserEntity findByUsername(String username) {
+    public UserDto findByUsername(String username) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
             throw new NoSuchElementException();
         }
-        return user.get();
+        return UserMapper.mapToUserDto(user.get());
     }
 
-    public void addCreatorRole() {
+    public void putProfileNameInSession(HttpSession session) {
         Optional<String> username = SecurityUtil.getSessionUser();
+        String profileName = "Профіль " + username.orElseThrow();
+        session.setAttribute("profileName", profileName);
+    }
+
+    public UserDto findCurrentUser() {
+        Optional<String> username = SecurityUtil.getSessionUser();
+        UserDto userDto = new UserDto();
         if (username.isPresent()) {
-            UserEntity user = findByUsername(username.get());
-            user.getRoles().add(roleRepository.findByName("CREATOR").orElseThrow());
-            userRepository.save(user);
+            userDto = findByUsername(username.get());
         }
+        return userDto;
     }
 }

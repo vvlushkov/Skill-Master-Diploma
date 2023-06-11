@@ -1,8 +1,6 @@
 package com.diploma.skillmaster.controller;
 
 import com.diploma.skillmaster.dto.CourseDto;
-import com.diploma.skillmaster.model.UserEntity;
-import com.diploma.skillmaster.security.SecurityUtil;
 import com.diploma.skillmaster.service.CourseService;
 import com.diploma.skillmaster.service.UserService;
 import jakarta.validation.Valid;
@@ -12,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Controller class for handling course-related requests.
@@ -31,7 +28,7 @@ public class CourseController {
      * @param model the model object for passing data to the view
      * @return the name of the view template to render
      */
-    @GetMapping
+    @GetMapping()
     public String getAllCourses(Model model) {
         List<CourseDto> courses = courseService.findAll().stream().sorted().toList();
         model.addAttribute("courses", courses);
@@ -42,13 +39,13 @@ public class CourseController {
      * Handles the GET request for searching courses by name.
      * Retrieves courses from the course service that match the provided name and adds them to the model.
      *
-     * @param name  the name of the course to search for
+     * @param keyword  the name of the course to search for
      * @param model the model object for passing data to the view
      * @return the name of the view template to render
      */
     @GetMapping("/search")
-    public String getCoursesByName(@RequestParam(value = "name") String name, Model model){
-        List<CourseDto> courses = courseService.findByName(name);
+    public String getCoursesByName(@RequestParam(value = "keyword") String keyword, Model model) {
+        List<CourseDto> courses = courseService.findByKeyword(keyword);
         model.addAttribute("courses", courses);
         return "courses-list";
     }
@@ -64,15 +61,8 @@ public class CourseController {
     public String getCourse(@PathVariable Long courseId, Model model) {
         CourseDto courseDto = courseService.findById(courseId);
         model.addAttribute("course", courseDto);
-
-        Optional<String> username = SecurityUtil.getSessionUser();
-        UserEntity user = new UserEntity();
-        if (username.isPresent()) {
-            user = userService.findByUsername(username.get());
-        }
-        model.addAttribute("user", user);
-
-        return "course-detail";
+        model.addAttribute("user", userService.findCurrentUser());
+        return "course-details";
     }
 
     /**
@@ -84,10 +74,39 @@ public class CourseController {
      */
     @GetMapping("/new")
     public String saveCourseForm(Model model) {
-        CourseDto courseDto = new CourseDto();
-        model.addAttribute("course", courseDto);
-        model.addAttribute("courseId", courseDto.getId()); //WTF
+        CourseDto course = new CourseDto();
+        model.addAttribute("course", course);
         return "course-save";
+    }
+
+    /**
+     * Handles the POST request for "/save" endpoint.
+     * Saves the course data.
+     *
+     * @param course  the CourseDto object containing the course data
+     * @param courseId   the ID of the course being edited
+     * @param mode       the mode of operation ("EDIT" or "CREATE")
+     * @param result     the BindingResult object for validation errors
+     * @param model      the model object for passing data to the view
+     * @return the name of the view template to render or a redirect URL
+     */
+    @PostMapping("/save")
+    public String saveCourse(@Valid @ModelAttribute("course") CourseDto course,
+                             BindingResult result,
+                             Model model,
+                             @RequestParam(value = "mode", required = false) String mode,
+                             @RequestParam(value = "courseId", required = false) Long courseId) {
+        if (result.hasErrors()) {
+            model.addAttribute("course", course);
+            return "course-save";
+        }
+
+        if (mode != null && mode.equals("EDIT") && (courseId != null)) {
+            course.setId(courseId);
+        }
+
+        courseService.save(course);
+        return "redirect:/course";
     }
 
     /**
@@ -102,39 +121,9 @@ public class CourseController {
     public String editCourseForm(@PathVariable("courseId") Long courseId, Model model) {
         CourseDto courseDto = courseService.findById(courseId);
         model.addAttribute("course", courseDto);
-        model.addAttribute("courseId", courseId); //WTF
         return "course-save";
     }
 
-    /**
-     * Handles the POST request for "/save" endpoint.
-     * Saves the course data.
-     *
-     * @param courseDto  the CourseDto object containing the course data
-     * @param courseId   the ID of the course being edited
-     * @param mode       the mode of operation ("EDIT" or "CREATE")
-     * @param result     the BindingResult object for validation errors
-     * @param model      the model object for passing data to the view
-     * @return the name of the view template to render or a redirect URL
-     */
-    @PostMapping("/save")
-    public String saveCourse(@Valid @ModelAttribute("course") CourseDto courseDto,
-                                 @ModelAttribute("courseId") Long courseId,
-                                 @RequestParam("mode") String mode,
-                                 BindingResult result,
-                                 Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("course", courseDto);
-            return "course-save";
-        }
-
-        if (mode.equals("EDIT")) {
-            courseDto.setId(courseId);
-        }
-
-        courseService.save(courseDto);
-        return "redirect:/course";
-    }
 
     /**
      * Handles the GET request for "/{courseId}/delete" endpoint.

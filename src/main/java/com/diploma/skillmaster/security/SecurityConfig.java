@@ -34,7 +34,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests().requestMatchers(
                 "/",
                 "/login",
-                "/registration").permitAll();
+                "/registration",
+                "/course/**",
+                "/creator/**").permitAll();
 
         http.formLogin(form -> form
                 .loginPage("/login")

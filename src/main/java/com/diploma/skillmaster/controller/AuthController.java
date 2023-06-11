@@ -1,8 +1,9 @@
 package com.diploma.skillmaster.controller;
 
 import com.diploma.skillmaster.dto.UserDto;
-import com.diploma.skillmaster.model.Role;
+import com.diploma.skillmaster.service.RoleService;
 import com.diploma.skillmaster.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
 /**
  * Controller class for handling authentication and user registration.
  */
@@ -21,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+    private final RoleService roleService;
 
     /**
      * Retrieves the home page.
@@ -28,7 +28,8 @@ public class AuthController {
      * @return The view name for the home page.
      */
     @GetMapping("/")
-    public String getHomePage() {
+    public String getHomePage(HttpSession session) {
+        userService.putProfileNameInSession(session);
         return "home";
     }
 
@@ -75,8 +76,7 @@ public class AuthController {
             return "registration";
         }
 
-        userDto.setRoles(List.of(Role.builder().name("USER").build()));
-        userService.save(userDto);
-        return "redirect:/home";
+        roleService.addUserRoleByDefaultAndSave(userDto);
+        return "redirect:/login";
     }
 }

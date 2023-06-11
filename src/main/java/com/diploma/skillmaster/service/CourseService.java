@@ -35,14 +35,13 @@ public class CourseService {
      * Saves a course.
      *
      * @param courseDto The CourseDto object containing course details to be saved.
-     * @return The CourseDto object representing the saved course.
      */
-    public CourseDto save(CourseDto courseDto) {
+    public void save(CourseDto courseDto) {
         String username = SecurityUtil.getSessionUser().orElseThrow();
         UserEntity user = userRepository.findByUsername(username).orElseThrow();
         Course course = CourseMapper.mapToCourse(courseDto);
         course.setCreator(user);
-        return CourseMapper.mapToCourseDto(courseRepository.save(course));
+        courseRepository.save(course);
     }
 
     /**
@@ -69,11 +68,14 @@ public class CourseService {
     /**
      * Retrieves a list of courses by their name.
      *
-     * @param name The name of the courses to retrieve.
+     * @param keyword The name of the courses to retrieve.
      * @return A list of CourseDto objects representing the retrieved courses.
      */
-    public List<CourseDto> findByName(String name) {
-        List<Course> courses = courseRepository.findCourseByNameLikeIgnoreCase(name);
-        return courses.stream().map(CourseMapper::mapToCourseDto).toList();
+    public List<CourseDto> findByKeyword(String keyword) {
+        List<Course> allCourses = courseRepository.findAll();
+        List<Course> matchingCourses = allCourses.stream()
+                .filter(course -> course.getName().toLowerCase().contains(keyword.toLowerCase().trim()))
+                .toList();
+        return matchingCourses.stream().map(CourseMapper::mapToCourseDto).toList();
     }
 }

@@ -13,8 +13,8 @@ public interface CourseMapper {
                 .createdOn(courseDto.getCreatedOn())
                 .updatedOn(courseDto.getUpdatedOn())
                 .creator(courseDto.getCreator())
-                .steps(courseDto.getSteps()
-                        .stream().map(StepMapper::mapToStep).toList())
+                //.steps(courseDto.getSteps()
+                //        .stream().map(StepMapper::mapToStep).toList())
                 .build();
     }
 

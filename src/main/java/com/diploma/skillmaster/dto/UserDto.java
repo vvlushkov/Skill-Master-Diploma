@@ -1,26 +1,25 @@
 package com.diploma.skillmaster.dto;
 
 import com.diploma.skillmaster.model.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private Long id;
     @NotEmpty(message = "Це поле повинно бути заповненим!")
-    @Min(4)
-    @Max(10)
+    @Size(min = 4, max = 10, message = "Нікнейм повинен бути завдовшки від 4 до 10 символів")
     private String username;
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     @Email(message = "Електронна пошта повинна відповідати шаблону \"example@mail.com\"!")
     private String email;
     @NotEmpty(message = "Це поле повинно бути заповненим!")
-    @Min(8)
-    @Max(20)
+    @Size(min = 4, max = 20, message = "Пароль повинен бути завдовшки від 8 до 20 символів")
     private String password;
     private List<Role> roles;
 }
