@@ -32,7 +32,7 @@
                 <li sec:authorize="!isAuthenticated" class="nav-item"><a class="nav-link" th:href="@{/login}">Увійти</a></li>
                 <li sec:authorize="!isAuthenticated" class="nav-item"><a class="nav-link" th:href="@{/registration}">Зареєструватися</a></li>
                 <li sec:authorize="isAuthenticated" class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" th:text="${session.profileName}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Профіль</a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" th:text="'Профіль ' + ${session.profileName}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Профіль</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                         <li sec:authorize="hasAuthority('CREATOR')"><a class="dropdown-item" th:href="@{/course/new}">Створити курс</a></li>
                         <li sec:authorize="!hasAuthority('CREATOR')"><a class="dropdown-item" th:href="@{/creator/new}">Стати автором</a></li>

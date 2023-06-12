@@ -1,7 +1,8 @@
 package com.diploma.skillmaster.controller;
 
-import com.diploma.skillmaster.dto.CourseDto;
 import com.diploma.skillmaster.dto.StepDto;
+import com.diploma.skillmaster.mapper.CourseMapper;
+import com.diploma.skillmaster.service.CourseService;
 import com.diploma.skillmaster.service.StepService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,52 +15,66 @@ import org.springframework.web.bind.annotation.*;
  * Controller class for handling step-related requests.
  */
 @Controller
-@RequestMapping("/step")
+@RequestMapping("/course/step")
 @RequiredArgsConstructor
 public class StepController {
     private final StepService stepService;
+    private final CourseService courseService;
 
     @GetMapping("/new")
-    public String saveStepForm(Model model) {
+    public String saveStepForm(Model model,
+                               @RequestParam(name = "courseId") Long courseId) {
         StepDto stepDto = new StepDto();
         model.addAttribute("step", stepDto);
-        model.addAttribute("courseId", stepDto.getId()); //WTF
+
+        String mode = "NEW";
+        model.addAttribute("mode", mode);
+        model.addAttribute("courseId", courseId);
+
         return "step-save";
     }
 
     @GetMapping("/{stepId:\\d+}/edit")
-    public String editStepForm(@PathVariable("stepId") Long stepId, Model model) {
+    public String editStepForm(@PathVariable("stepId") Long stepId,
+                               Model model,
+                               @RequestParam(name = "courseId") Long courseId) {
         StepDto stepDto = stepService.findById(stepId);
         model.addAttribute("step", stepDto);
-        model.addAttribute("stepId", stepId); //WTF
+
+        String mode = "EDIT";
+        model.addAttribute("mode", mode);
+        model.addAttribute("courseId", courseId);
+
         return "step-save";
     }
 
     @PostMapping("/save")
-    public String saveCourse(@Valid @ModelAttribute("step") StepDto stepDto,
-                             @ModelAttribute("stepId") Long stepId,
-                             @RequestParam("mode") String mode,
-                             @ModelAttribute("course") CourseDto courseDto,
-                             BindingResult result,
-                             Model model) {
+    public String saveStep(@Valid @ModelAttribute("step") StepDto stepDto,
+                           BindingResult result,
+                           Model model,
+                           @ModelAttribute("mode") String mode,
+                           @RequestParam(name = "courseId") Long courseId,
+                           @RequestParam(name = "stepId", required = false) Long stepId) {
         if (result.hasErrors()) {
+            stepDto.setId(stepId);
             model.addAttribute("step", stepDto);
+            model.addAttribute("mode", mode);
+            model.addAttribute("courseId", courseId);
             return "step-save";
         }
 
-        if (mode.equals("EDIT")) {
+        if ((mode != null) && (mode.equals("EDIT")) && (stepId != null)) {
             stepDto.setId(stepId);
         }
-
-        stepDto.setCourse(courseDto);
+        stepDto.setCourse(CourseMapper.mapToCourse(courseService.findById(courseId)));
         stepService.save(stepDto);
-        return "redirect:/course/" + courseDto.getId();
+        return "redirect:/course/" + courseId;
     }
 
     @GetMapping("{stepId:\\d+}/delete")
     public String deleteStep(@PathVariable("stepId") Long stepId,
-                             @ModelAttribute("course") CourseDto courseDto) {
+                             @RequestParam(name = "courseId") Long courseId) {
         stepService.delete(stepId);
-        return "redirect:/course/" + courseDto.getId();
+        return "redirect:/course/" + courseId;
     }
 }

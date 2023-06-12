@@ -58,9 +58,10 @@ public class CourseController {
      * @return the name of the view template to render
      */
     @GetMapping("/{courseId:\\d+}")
-    public String getCourse(@PathVariable Long courseId, Model model) {
+    public String getCourse(@PathVariable("courseId") Long courseId, Model model) {
         CourseDto courseDto = courseService.findById(courseId);
         model.addAttribute("course", courseDto);
+        model.addAttribute("courseId", courseId);
         model.addAttribute("user", userService.findCurrentUser());
         return "course-details";
     }
@@ -76,6 +77,8 @@ public class CourseController {
     public String saveCourseForm(Model model) {
         CourseDto course = new CourseDto();
         model.addAttribute("course", course);
+        String mode = "NEW";
+        model.addAttribute("mode", mode);
         return "course-save";
     }
 
@@ -98,11 +101,13 @@ public class CourseController {
                              @RequestParam(value = "courseId", required = false) Long courseId) {
         if (result.hasErrors()) {
             model.addAttribute("course", course);
+            model.addAttribute("mode", mode);
             return "course-save";
         }
 
-        if (mode != null && mode.equals("EDIT") && (courseId != null)) {
+        if ((mode != null) && (mode.equals("EDIT")) && (courseId != null)) {
             course.setId(courseId);
+
         }
 
         courseService.save(course);
@@ -121,6 +126,8 @@ public class CourseController {
     public String editCourseForm(@PathVariable("courseId") Long courseId, Model model) {
         CourseDto courseDto = courseService.findById(courseId);
         model.addAttribute("course", courseDto);
+        String mode = "EDIT";
+        model.addAttribute("mode", mode);
         return "course-save";
     }
 

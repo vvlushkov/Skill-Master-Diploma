@@ -48,7 +48,7 @@ public class UserService {
 
     public void putProfileNameInSession(HttpSession session) {
         Optional<String> username = SecurityUtil.getSessionUser();
-        String profileName = "Профіль " + username.orElseThrow();
+        String profileName = username.orElseThrow();
         session.setAttribute("profileName", profileName);
     }
 

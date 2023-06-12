@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-1}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${course.name}"></title>
 </head>
-<body>
+<style>
+    .content {
+        flex: 1 0 auto;
+    }
+</style>
+<body layout:fragment="body" class="h-100 d-flex flex-md-column">
+<main class="content">
+    <section class="py-5">
+        <div class="container px-5 my-0">
+            <div class="text-center mb-3">
+                <input id="courseId" name="courseId" th:value="${courseId}" type="hidden">
 
+                <h1 class="display-5 fw-bolder" th:text="${course.name}">Назва</h1>
+                <p class="fs-3 fw-bold text-black mb-0">Про що цей курс:</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <a href="#!"><img class="card-img-top" th:src="${course.imageUrl}" alt="..."/></a>
+                        <div class="card-body">
+                            <div class="text-black" th:text="'Автор: ' + ${course.creator.username}"></div>
+                            <h2 class="card-title">Опис:</h2>
+                            <p class="card-text" style="white-space: pre-wrap" th:text="${course.description}"></p>
+                            <div th:if="${user.id} == ${course.creator.id}">
+                                <a class="btn btn-primary" th:href="@{/course/step/new(courseId = ${courseId})}">Стоврити крок курсу</a>
+                                <a class="btn btn-warning" th:href="@{/course/{courseId}/edit(courseId = ${course.id})}">Редагувати курс</a>
+                                <a class="btn btn-danger" th:href="@{/course/{courseId}/delete(courseId = ${course.id})}"
+                                   onclick="return confirm('Ви впевненні, що хочете назавжди видалити цей курс?');">Видалити курс</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div th:each="step :${course.steps}" class="col-lg-12 mb-2">
+                            <div class="card">
+                                <div class="card-body ">
+                                    <h2 th:text="${step.name}" class="card-title h4">Назва кроку</h2>
+                                    <a th:if="${step.imageUrl != ''}" href="#!"><img class="card-img" th:src="${step.imageUrl}" alt="..."/></a>
+                                    <p class="card-text" style="white-space: pre-wrap" th:text="${step.content}"></p>
+                                    <iframe th:if="${step.videoUrl != ''}" th:src="${step.videoUrl}" allow="autoplay" height="480" class="w-100"></iframe>
+
+                                    <div th:if="${user.id} == ${course.creator.id}">
+                                        <a class="btn btn-primary" th:href="@{/course/step/new(courseId = ${courseId})}">Стоврити наступний крок курсу</a>
+                                        <a class="btn btn-warning" th:href="@{/course/step/{stepId}/edit(stepId = ${step.id}, courseId = ${courseId})}">Редагувати крок</a>
+                                        <a class="btn btn-danger" th:href="@{/course/step/{stepId}/delete(stepId = ${step.id}, courseId = ${courseId})}"
+                                           onclick="return confirm('Ви впевненні, що хочете назавжди видалити цей крок?');">Видалити крок</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Side widgets-->
+                <div class="col-lg-4">
+                    <!-- Search widget-->
+                    <div class="card mb-4">
+                        <div class="card-header">Цей курс не цікавить? Спробуй знайти інший</div>
+                        <div class="card-body">
+                            <form class="input-group" th:action="@{/course/search}">
+                                <input name="keyword" class="form-control" type="search" placeholder="Впиши назву або ключове слово"
+                                       aria-label="Enter search term..." aria-describedby="button-search"/>
+                                <button type="submit" class="btn btn-primary">Знайти</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Categories widget-->
+                    <div class="card mb-4">
+                        <div class="card-header text-center">Місце для додаткового функціоналу й посиланнь</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <ul class="list-unstyled mb-0 text-center">
+                                        <li><a href="#!">Певна кнопка з посиланням</a></li>
+                                        <li><a href="#!">Певна кнопка з посиланням</a></li>
+                                        <li><a href="#!">Певна кнопка з посиланням</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Side widget-->
+                    <div class="card mb-4">
+                        <div class="card-header">Місце для додаткового функціоналу</div>
+                        <div class="card-body">В цьому блоці може знаходитись що завгодно. Реклама, наприклад.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main><br>
+<footer layout:fragment="footer"></footer>
 </body>
 </html>

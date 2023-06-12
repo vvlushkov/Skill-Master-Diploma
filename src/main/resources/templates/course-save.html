@@ -15,7 +15,7 @@
     <main class="content">
         <section class="py-5">
             <div class="mx-auto col-10 col-md-8 col-lg-5">
-                <form role="form" method="post" th:action="@{/course/save}" th:object="${course}">
+                <form role="form" method="post" th:action="${mode} == 'NEW' ? @{/course/save} : @{/course/save(mode = EDIT, courseId = ${course.id})}" th:object="${course}">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Назва курсу</label>
@@ -48,7 +48,7 @@
                             <p th:if="${#fields.hasErrors('description')}" class="text-danger mb-2" th:errors="*{description}"></p>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary mt-3">Створити курс</button>
+                    <button type="submit" class="btn btn-outline-primary mt-3" th:text="${mode == 'NEW'} ? 'Створити курс' : 'Редагувати курс'">Назва дії</button>
                 </form>
             </div>
         </section>

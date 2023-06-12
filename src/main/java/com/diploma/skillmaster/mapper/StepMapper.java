@@ -11,7 +11,7 @@ public interface StepMapper {
                 .content(stepDto.getContent())
                 .imageUrl(stepDto.getImageUrl())
                 .videoUrl(stepDto.getVideoUrl())
-                .course(CourseMapper.mapToCourse(stepDto.getCourse()))
+                .course(stepDto.getCourse())
                 .build();
     }
 
@@ -22,7 +22,7 @@ public interface StepMapper {
                 .content(step.getContent())
                 .imageUrl(step.getImageUrl())
                 .videoUrl(step.getVideoUrl())
-                .course(CourseMapper.mapToCourseDto(step.getCourse()))
+                .course(step.getCourse())
                 .build();
     }
 }
