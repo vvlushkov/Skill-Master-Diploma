@@ -1,7 +1,6 @@
 package com.diploma.skillmaster.dto;
 
 import com.diploma.skillmaster.model.Course;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

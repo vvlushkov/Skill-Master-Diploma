@@ -1,8 +1,6 @@
 package com.diploma.skillmaster.controller;
 
 import com.diploma.skillmaster.dto.StepDto;
-import com.diploma.skillmaster.mapper.CourseMapper;
-import com.diploma.skillmaster.service.CourseService;
 import com.diploma.skillmaster.service.StepService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StepController {
     private final StepService stepService;
-    private final CourseService courseService;
 
     @GetMapping("/new")
     public String saveStepForm(Model model,
@@ -66,8 +63,7 @@ public class StepController {
         if ((mode != null) && (mode.equals("EDIT")) && (stepId != null)) {
             stepDto.setId(stepId);
         }
-        stepDto.setCourse(CourseMapper.mapToCourse(courseService.findById(courseId)));
-        stepService.save(stepDto);
+        stepService.save(courseId, stepDto);
         return "redirect:/course/" + courseId;
     }
 

@@ -1,14 +1,11 @@
 package com.diploma.skillmaster.service;
 
 import com.diploma.skillmaster.dto.StepDto;
-import com.diploma.skillmaster.mapper.StepMapper;
-import com.diploma.skillmaster.model.Course;
+import com.diploma.skillmaster.mapper.CourseMapper;
 import com.diploma.skillmaster.model.Step;
-import com.diploma.skillmaster.repository.CourseRepository;
 import com.diploma.skillmaster.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.NoSuchElementException;
 import static com.diploma.skillmaster.mapper.StepMapper.mapToStep;
 import static com.diploma.skillmaster.mapper.StepMapper.mapToStepDto;
@@ -20,30 +17,7 @@ import static com.diploma.skillmaster.mapper.StepMapper.mapToStepDto;
 @RequiredArgsConstructor
 public class StepService {
     private final StepRepository stepRepository;
-    private final CourseRepository courseRepository;
-
-    /**
-     * Creates a step for a course.
-     *
-     * @param courseId The ID of the course to create the step for.
-     * @param stepDto  The StepDto object containing step details.
-     */
-    public void createStep(Long courseId, StepDto stepDto) {
-        Course course = courseRepository.findById(courseId).orElseThrow();
-        Step step = mapToStep(stepDto);
-        step.setCourse(course);
-        stepRepository.save(step);
-    }
-
-    /**
-     * Retrieves all steps.
-     *
-     * @return A list of StepDto objects representing the steps.
-     */
-    public List<StepDto> findAllSteps() {
-        List<Step> steps = stepRepository.findAll();
-        return steps.stream().map(StepMapper::mapToStepDto).toList();
-    }
+    private final CourseService courseService;
 
     /**
      * Retrieves a step by its ID.
@@ -62,7 +36,8 @@ public class StepService {
      *
      * @param stepDto The StepDto object containing step details to be updated.
      */
-    public void save(StepDto stepDto) {
+    public void save(Long courseId, StepDto stepDto) {
+        stepDto.setCourse(CourseMapper.mapToCourse(courseService.findById(courseId)));
         Step step = mapToStep(stepDto);
         stepRepository.save(step);
     }
