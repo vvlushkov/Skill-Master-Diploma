@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StepDto implements Comparable<StepDto> {
     private Long id;
-    @Size(min = 4, max = 40, message = "Назва кроку повинна бути завдовшки від 4 до 40 символів")
+    @Size(min = 4, max = 40, message = "Назва кроку повинна бути завдовжки від 4 до 40 символів")
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     private String name;
     @Size(min = 10, max = 3000, message = "Опис кроку повинен бути від 10 до 3000 символів")

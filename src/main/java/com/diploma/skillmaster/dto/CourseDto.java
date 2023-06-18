@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDto implements Comparable<CourseDto>{
     private Long id;
-    @Size(min = 4, max = 40, message = "Назва курсу повинна бути завдовшки від 4 до 40 символів")
+    @Size(min = 4, max = 40, message = "Назва курсу повинна бути завдовжки від 4 до 40 символів")
     @NotEmpty(message = "Це поле повинно бути заповненим!")
     private String name;
     @Size(min = 10, max = 3000, message = "Опис курсу повинен бути від 10 до 3000 символів")
