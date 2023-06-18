@@ -48,8 +48,10 @@ public class UserService {
 
     public void putProfileNameInSession(HttpSession session) {
         Optional<String> username = SecurityUtil.getSessionUser();
-        String profileName = username.orElseThrow();
-        session.setAttribute("profileName", profileName);
+        if (username.isPresent()) {
+            String profileName = username.orElseThrow();
+            session.setAttribute("profileName", profileName);
+        }
     }
 
     public UserDto findCurrentUser() {

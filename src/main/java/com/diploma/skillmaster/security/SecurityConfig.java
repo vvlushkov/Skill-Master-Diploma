@@ -29,14 +29,25 @@ public class SecurityConfig {
         http.authorizeHttpRequests().requestMatchers(
                 "/css/**",
                 "/js/**",
-                "/assets/**").permitAll();
+                "/assets/**"
+        ).permitAll();
 
         http.authorizeHttpRequests().requestMatchers(
                 "/",
                 "/login",
                 "/registration",
-                "/course/**",
-                "/creator/**").permitAll();
+                "/course/{courseId:\\d+}",
+                "/course/search",
+                "/course"
+        ).permitAll();
+
+        http.authorizeHttpRequests().requestMatchers(
+                "/course/step/**",
+                "/course/{courseId:\\d+}/**",
+                "/course/save",
+                "/course/new",
+                "/creator/**"
+        ).authenticated();
 
         http.formLogin(form -> form
                 .loginPage("/login")
